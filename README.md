@@ -149,5 +149,17 @@ However, I would not consider these two styles mutually exclusive. In fact, if w
 
 `\add_to_each(n) { map((n+)) }` ==> `\(n) { map((n+))}`
 
-Then it would make sense for this to be considered simply a statement of data to be transformed or assigned as usual, automatically giving us the option for the second syntax.
+Then it would make sense for this to be considered simply a statement of data to be transformed or assigned as usual, automatically giving us the option for the second style of syntax.
+
+## Data to parameters
+
+With the ability to treat a function like data, it follows that we perhaps would like to put it through a few transformations, before finally still taking it as a parameter. A way to allow for this, is to simply mark a parameter as such:
+
+```
+[1,2,3] |
+inverse |
+map(_) sum
+```
+
+With the rule here being, that the actual data streams come first, and the parameter data streams come last.
 
