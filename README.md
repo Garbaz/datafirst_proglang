@@ -1,19 +1,24 @@
 
 # A Data-First Programming Language
 
-Pretty much all programming languages are constructed in analogy to the SVO (Subject Verb Object) structure found in the English language.
+Most programming languages are constructed in analogy to the SVO (Subject Verb Object) structure found in the English language.
 
-`Subject.Verb(Object);`
+`Subject.Verb(Object)`
 
 Even mathematical expressions are effectively SVO:
 
-`7 - 3;`, `counter += 1;`
+`7 - 3`,  `counter += 1`
 
 Alternatively, an VSO-like order of terms is also sometimes employed:
 
 `foldl (+) 0 [1,2,3]`
 
-Generally speaking, I would call these styles of programming languages "data-last", whereas in this project, I would like to consider a programming language that is "data-first", inspired by the SOV word order found in the majority of natural languages.
+Generally speaking, I would call these styles of programming languages "data-last", meaning that we write the data (e.g. `[1,2,3]`) towards the end of the statements, which then is put through functions from right to left:
+
+`result = foo(bar(data))`
+
+In this project, I would like to consider a programming language that is "data-first", inspired by the SOV word order found in the majority of natural languages and the intuition with which we reason about the inner workings of our programs.
+
 
 ## Why?
 
@@ -40,6 +45,7 @@ However, if we were to write this out as one line in a data-last programming lan
 `result = sum(map(inverse, [1,2,3]))`
 
 Which, at least to me, seems to go against the intuitive way we think about solving the problem.
+
 
 ## An intuitive order of terms
 
@@ -75,6 +81,7 @@ Perhaps, we could even incorporate this differetiation between data and paramete
 
 with `map` being defined to have one input data stream and one parameter, and `sum` being defined to have one input data stream and no parameters.
 
+
 ## Multiple inputs
 
 However, in some cases we might simply have multiple independent streams of data, with each one coming itself out of a long sequence of transformations, which we want to put into a function. In an data-last style of programming, this is handled rather neatly:
@@ -95,6 +102,7 @@ Putting this into syntax, we might want to write something like this:
 
 The `|` here signifies, that we want to put the current data stream aside and start a new one. Finally, in calling concat at the beginning of a new datastream, the ones put aside are collected, and put through the final transformation. In a way, this `|` could be considered optional, since for example in writing `list2` in our statement above, which does not take any input, it already is clear that we have to leave the current data stream dangling and start a new one.
 
+
 ## Mathematical expressions
 
 For better or worse, the use of infix operators in mathematical expressions is deeply ingrained into the way we think about calculations, even if that sometimes requires some juggling of symbols to achive the desired result. To take an example:
@@ -112,6 +120,7 @@ or, taking `|` as optional, perhaps more clearly as:
 This effectively gives us our expression in Reverse Polish notation.
 
 While perfectly readable with some rethinking, I still would consider it perhaps sensible to take a similar route to the one Haskell took, and allow symbolic infix operators, while also keeping open the option to turn an infix operator into a function when needed.
+
 
 ## Function definitions
 
