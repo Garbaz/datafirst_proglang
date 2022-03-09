@@ -45,7 +45,7 @@ Which, at least to me, seems to go against the intuitive way we think about solv
 
 Taking the intuition above, a better order of terms would perhaps be something like this:
 
-`[1,2,3] map(inverse,_) sum(_) ~> result`
+`[1,2,3] map(inverse,_) sum(_) |> result`
 
 Reading from left to right, we have a term defining some data, which then put through the map function, through the sum function, and finally assigned to the result. At each step, all we have to think about, is what data we have in our hand, and what we want to do next with it. If we split this up into multiple lines, we don't have to change anything:
 
@@ -71,7 +71,7 @@ Of course, as is already evident above with `map`, a question that immediately c
 
 Perhaps, we could even incorporate this differetiation between data and parameters into the language itself:
 
-`[1,2,3] map(inverse) sum ~> result`
+`[1,2,3] map(inverse) sum |> result`
 
 with `map` being defined to have one input data stream and one parameter, and `sum` being defined to have one input data stream and no parameters.
 
@@ -91,9 +91,9 @@ given the lists `list1` and `list2`, we would first think, in arbitrary order, o
 
 Putting this into syntax, we might want to write something like this:
 
-`list1 map(f) \ list2 reverse \ concat`
+`list1 map(f) | list2 reverse | concat`
 
-The `\` here signifies, that we want to put the current data stream aside and start a new one. Finally, in calling concat at the beginning of a new datastream, the ones put aside are collected, and put through the final transformation. In a way, this `\` could be considered optional, since for example in writing `list2` in our statement above, which does not take any input, it already is clear that we have to leave the current data stream dangling and start a new one.
+The `|` here signifies, that we want to put the current data stream aside and start a new one. Finally, in calling concat at the beginning of a new datastream, the ones put aside are collected, and put through the final transformation. In a way, this `|` could be considered optional, since for example in writing `list2` in our statement above, which does not take any input, it already is clear that we have to leave the current data stream dangling and start a new one.
 
 ## Mathematical expressions
 
@@ -103,13 +103,51 @@ For better or worse, the use of infix operators in mathematical expressions is d
 
 Writing this in the above syntax:
 
-`1000 \ 729 \ + \ 4096 \ 8 \ + \ *`
+`1000 | 729 | + | 4096 | 8 | + | *`
 
-or, taking `\` as optional, perhaps more clearly as:
+or, taking `|` as optional, perhaps more clearly as:
 
-`1000 729 + \ 4096 8 + \ *`
+`1000 729 + | 4096 8 + | *`
 
-effectively gives us our expression in Reverse Polish notation.
+This effectively gives us our expression in Reverse Polish notation.
 
 While perfectly readable with some rethinking, I still would consider it perhaps sensible to take a similar route to the one Haskell took, and allow symbolic infix operators, while also keeping open the option to turn an infix operator into a function when needed.
+
+## Function definitions
+
+Taking the above idea of separating a function's arguments into data and parameters, perhaps a syntax for defining a function as follows would make sense:
+
+```
+(List) \add_to_each(n:Number) -> List {
+    map((n+))
+}
+```
+
+With allowing for type inference as done in Rust or Haskell:
+
+```
+\add_to_each(n) {
+    map((n+))
+}
+```
+
+As with the idea of parameters, in writing the function name before the code, we do go against the idea of data-first for the sake of readability. Generally, when looking at a function again at a later point in time, we are primarily interested in it's signiature, so it makes sense to have it all in one place.
+
+An alternative syntax that adheres more strictly to the data-first principle:
+
+```
+(List) \(n) -> List {
+    map((n+))
+} |> add_to_each
+```
+
+Or with inferred types and written into one line:
+
+`\(n) { map((n+)) } |> add_to_each`
+
+However, I would not consider these two styles mutually exclusive. In fact, if we consider the first syntax with the permission for a function to be anonymous:
+
+`\add_to_each(n) { map((n+)) }` ==> `\(n) { map((n+))}`
+
+Then it would make sense for this to be considered simply a statement of data to be transformed or assigned as usual, automatically giving us the option for the second syntax.
 
