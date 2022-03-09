@@ -19,7 +19,7 @@ Generally speaking, I would call these styles of programming languages "data-las
 
 The core idea is to think in terms of data flowing through the program, going through various transformations, before being spat out the other end. All programs effectively work in that way, which, at least in imperative programming languages, is generally also represented in the macro structure of the language, i.e. with a series of statements that are executed from top to bottom. However, when it comes down to the syntax of applying functions/etc., the order tends to be reversed, with the input data to the right, and the result being to the left:
 
-```rust
+```
 // Data flows from top to bottom (input ~> x ~> y ~> z ~> return)
 foo(x) {
     y = bar(x); // But in applying functions
@@ -49,7 +49,7 @@ Taking the intuition above, a better order of terms would perhaps be something l
 
 Reading from left to right, we have a term defining some data, which then put through the map function, through the sum function, and finally assigned to the result. At each step, all we have to think about, is what data we have in our hand, and what we want to do next with it. If we split this up into multiple lines, we don't have to change anything:
 
-```rust
+```
 [1,2,3]
 map(inverse,_)
 sum(_)
@@ -58,7 +58,7 @@ sum(_)
 
 Which is analogous to how it would look in an imperative style:
 
-```rust
+```
 x = [1,2,3];
 y = map(inverse,x);
 z = sum(y);
