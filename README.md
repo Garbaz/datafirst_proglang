@@ -79,7 +79,7 @@ with `map` being defined to have one input data stream and one parameter, and `s
 
 However, in some cases we might simply have multiple independent streams of data, with each one coming itself out of a long sequence of transformations, which we want to put into a function. In an data-last style of programming, this is handled rather neatly:
 
-`concat(map(f, list1), reverse(list2))`, `(1000 + 729) * (4096 + 8)`
+`concat(map(f, list1), reverse(list2))`
 
 Which, besides order, does not discriminate between the two inputs.
 
@@ -91,7 +91,25 @@ given the lists `list1` and `list2`, we would first think, in arbitrary order, o
 
 Putting this into syntax, we might want to write something like this:
 
-`list1 map(f) ~ list2 reverse ~ concat`
+`list1 map(f) \ list2 reverse \ concat`
 
-The `~` here signifies, that we want to put the current data stream aside and start a new one. Finally, in calling concat at the beginning of a new datastream, the ones put aside are collected, and put through the transformation.
+The `\` here signifies, that we want to put the current data stream aside and start a new one. Finally, in calling concat at the beginning of a new datastream, the ones put aside are collected, and put through the final transformation. In a way, this `\` could be considered optional, since for example in writing `list2` in our statement above, which does not take any input, it already is clear that we have to leave the current data stream dangling and start a new one.
+
+## Mathematical expressions
+
+For better or worse, the use of infix operators in mathematical expressions is deeply ingrained into the way we think about calculations, even if that sometimes requires some juggling of symbols to achive the desired result. To take an example:
+
+`(1000 + 729) * (4096 + 8)`
+
+Writing this in the above syntax:
+
+`1000 \ 729 \ + \ 4096 \ 8 \ + \ *`
+
+or, taking `\` as optional, perhaps more clearly as:
+
+`1000 729 + \ 4096 8 + \ *`
+
+effectively gives us our expression in Reverse Polish notation.
+
+While perfectly readable with some rethinking, I still would consider it perhaps sensible to take a similar route to the one Haskell took, and allow symbolic infix operators, while also keeping open the option to turn an infix operator into a function when needed.
 
