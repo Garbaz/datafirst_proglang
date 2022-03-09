@@ -1,5 +1,5 @@
 
-# Data-First Programming Language
+# A Data-First Programming Language
 
 Pretty much all programming languages are constructed in analogy to the SVO (Subject Verb Object) structure found in the English language.
 
