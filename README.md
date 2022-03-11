@@ -57,7 +57,7 @@ Which, at least to me, seems to go against the intuitive way we think about solv
 
 Taking the intuition above, perhaps a better order of terms would be something like this:
 
-`[1,2,3] map(inverse,_) sum(_) |> result`
+`[1,2,3] map(inverse,_) sum(_) ~> result`
 
 Reading from left to right, we have a term defining some data, which we then put through the map function, then through the sum function, and finally assign it to the result.\
 At each step, all we have to think about, is what data we have in our hand, and what we want to do with it next.
@@ -89,7 +89,7 @@ Of course, as is already evident above with `map`, a question that immediately c
 
 Perhaps, we could even incorporate this differetiation between data and parameters into the language's syntax:
 
-`[1,2,3] map(inverse) sum |> result`
+`[1,2,3] map(inverse) sum ~> result`
 
 with `map` being defined to have one input data stream and one parameter, and `sum` being defined to have one input data stream and no parameters.
 
@@ -162,12 +162,12 @@ An alternative syntax that adheres more strictly to the data-first principle:
 ```
 (List) \(n) -> List {
     map((n+))
-} |> add_to_each
+} ~> add_to_each
 ```
 
 Or with inferred types and written into one line:
 
-`\(n) { map((n+)) } |> add_to_each`
+`\(n) { map((n+)) } ~> add_to_each`
 
 However, I would not consider these two styles mutually exclusive. In fact, if we consider the first syntax with the options for a function to be anonymous:
 
