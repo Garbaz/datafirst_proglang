@@ -150,16 +150,16 @@ Taking the above idea of separating a function's arguments into data and paramet
 For example:
 
 ```
-(List) \add_to_each(n:Number) -> List {
-    map((n+))
+(List) \map_in_a_trenchcoat(f:Function) -> List {
+    map(f)
 }
 ```
 
-With allowing for type inference as done in Rust or Haskell:
+Or, with allowing for type inference as done in Rust or Haskell:
 
 ```
-\add_to_each(n) {
-    map((n+))
+\map_in_a_trenchcoat(n) {
+    map(f)
 }
 ```
 
@@ -168,18 +168,18 @@ As with the idea of parameters, in writing the function name before the code, we
 An alternative syntax that adheres more strictly to the data-first principle might look like this:
 
 ```
-(List) \(n) -> List {
-    map((n+))
-} ~> add_to_each
+(List) \(f) -> List {
+    map(f)
+} ~> map_in_a_trenchcoat
 ```
 
 Or with inferred types and written into one line:
 
-`\(n) { map((n+)) } ~> add_to_each`
+`\(f) { map(f) } ~> map_in_a_trenchcoat`
 
 However, I would not consider these two styles mutually exclusive. In fact, if we consider the first syntax with the option for a function to be anonymous:
 
-`\add_to_each(n) { map((n+)) }` => `\(n) { map((n+)) }`
+`\map_in_a_trenchcoat(f) { map(f) }` => `\(f) { map(f) }`
 
 Then it would make sense for this to be considered simply a statement of data to be transformed or assigned as usual, automatically giving us the option for the second style of syntax for free.
 
@@ -211,11 +211,38 @@ sum |
 _(_) _
 ```
 
-Though that of course would be unlikely to be of use in praxis.
+Though that of course would be unlikely to be done in praxis.
 
-It should be noted, that in this situation the `|` symbol can not be treated as optional, which perhaps would speak against this particular style of syntax. That is, unless we require for a function expression to be enclosed in parenthesis for it to be treated as data:
+It should be noted, that in this situation the `|` symbol can not be treated as optional, which perhaps would speak against this particular style of syntax. Alternatively we might want to require for a function expression to be enclosed as a code block `{...}` for it to be treated as data:
 
-```[1,2,3] |
-(inverse) |
+```
+[1,2,3] |
+{inverse} |
 map(_) sum
 ```
+
+This way, it is clear that we do not want to invoke the function `inverse` or the current data stream, but rather take it as data directly, restoring the previous optionality of our `|` symbol. This also would fit closely with the function syntax we defined above. For consistency, we might want to even require for an anonymous function to be defined explicitly:
+
+```
+[1,2,3] |
+\(){inverse} |
+map(_) sum
+```
+
+or, allowing for a degree of brevity:
+
+```
+[1,2,3] |
+\{inverse} |
+map(_) sum
+```
+
+No matter which of these last three style we were to permit, or perhaps all three, this way it would also make much sense to take a sequence of functions as one function to be applied, for example:
+
+```
+[1,2,3] |
+{sqrt inverse} |
+map(_) sum
+```
+
+In this sense, be it with the `\()` in front or not, the code block `{...}` would be to be understood in general as representing itself a function, a transformation that takes certain data in and puts certain data out, but lifted into being data itself, to be passed along a data stream or to be assigned to a label (i.e. to be defined as a named function).
