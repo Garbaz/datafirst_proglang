@@ -158,7 +158,7 @@ For example:
 Or, with allowing for type inference as done in Rust or Haskell:
 
 ```
-\map_in_a_trenchcoat(n) {
+\map_in_a_trenchcoat(f) {
     map(f)
 }
 ```
