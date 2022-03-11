@@ -96,7 +96,7 @@ with `map` being defined to have one input data stream and one parameter, and `s
 
 ## Multiple input streams
 
-However, in some cases we might simply have multiple independent streams of data, with each one coming itself out of a long sequence of transformations, which we want to put into a function. In an data-last style of programming, this is handled rather neatly:
+However, in some cases we might simply have multiple independent streams of data, with each one coming itself out of a long sequence of transformations, which we want to put into a function. In a data-last style of programming, this is handled rather neatly:
 
 `concat(map(f, list1), reverse(list2))`
 
@@ -142,6 +142,14 @@ While perfectly readable with some rethinking, I still would consider it perhaps
 Taking the above idea of separating a function's arguments into data and parameters, perhaps a syntax for defining a function as follows would make sense:
 
 ```
+(INPUT_TYPE) \FUNCTION_NAME( PARAMETERS ) -> OUTPUT_TYPE {
+    CODE
+}
+```
+
+For example:
+
+```
 (List) \add_to_each(n:Number) -> List {
     map((n+))
 }
@@ -157,7 +165,7 @@ With allowing for type inference as done in Rust or Haskell:
 
 As with the idea of parameters, in writing the function name before the code, we do go against the idea of data-first for the sake of readability, since generally, when looking at a function again at a later point in time, we tend to primarily be interested in it's name and signiature, so it makes sense to have that all in one place.
 
-An alternative syntax that adheres more strictly to the data-first principle:
+An alternative syntax that adheres more strictly to the data-first principle might look like this:
 
 ```
 (List) \(n) -> List {
@@ -169,13 +177,13 @@ Or with inferred types and written into one line:
 
 `\(n) { map((n+)) } ~> add_to_each`
 
-However, I would not consider these two styles mutually exclusive. In fact, if we consider the first syntax with the options for a function to be anonymous:
+However, I would not consider these two styles mutually exclusive. In fact, if we consider the first syntax with the option for a function to be anonymous:
 
-`\add_to_each(n) { map((n+)) }` ===> `\(n) { map((n+))}`
+`\add_to_each(n) { map((n+)) }` => `\(n) { map((n+)) }`
 
 Then it would make sense for this to be considered simply a statement of data to be transformed or assigned as usual, automatically giving us the option for the second style of syntax for free.
 
-## Data to parameters
+## Data to parameters/function
 
 With the ability to treat a function like data, it follows that we perhaps would like to put it through a few transformations, before finally still taking it as a parameter. A way to allow for this would be to simply have to option to mark a parameter as such:
 
@@ -185,5 +193,22 @@ inverse |
 map(_) sum
 ```
 
-With the rule here being, that the actual data streams come first, and the parameter data streams come last.
+Analogously, we might want to instead take a data function and apply it directly:
 
+```
+[1,2,3] |
+map |
+_(inverse) sum
+```
+
+With the rule here being, that the actual data streams come first, then the function/parameter data streams in order of their blanks (`_`). I.e. we could in theory write the above program as such:
+
+```
+[1,2,3] |
+map |
+inverse |
+sum |
+_(_) _
+```
+
+Though that of course would be unlikely to be of use in praxis.
