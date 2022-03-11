@@ -183,7 +183,7 @@ However, I would not consider these two styles mutually exclusive. In fact, if w
 
 Then it would make sense for this to be considered simply a statement of data to be transformed or assigned as usual, automatically giving us the option for the second style of syntax for free.
 
-## Data to parameters/function
+## Data to parameters/transformation
 
 With the ability to treat a function like data, it follows that we perhaps would like to put it through a few transformations, before finally still taking it as a parameter. A way to allow for this would be to simply have to option to mark a parameter as such:
 
@@ -193,7 +193,7 @@ inverse |
 map(_) sum
 ```
 
-Analogously, we might want to instead take a data function and apply it directly:
+Analogously, we might want to instead take a data function and apply it:
 
 ```
 [1,2,3] |
@@ -212,3 +212,10 @@ _(_) _
 ```
 
 Though that of course would be unlikely to be of use in praxis.
+
+It should be noted, that in this situation the `|` symbol can not be treated as optional, which perhaps would speak against this particular style of syntax. That is, unless we require for a function expression to be enclosed in parenthesis for it to be treated as data:
+
+```[1,2,3] |
+(inverse) |
+map(_) sum
+```
