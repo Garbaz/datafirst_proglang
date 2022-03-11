@@ -26,9 +26,9 @@ The core idea is to think in terms of data flowing through the program, going th
 However, when it comes down to the syntax of individual lines, the order tends to be reversed, with the input data standing to the right, and the result being to the left:
 
 ```c
-// Data flows from top to bottom (input ~> x ~> y ~> z ~> return)...
+// Data flows from top to bottom (input ~> x ~> y ~> z ~> return)
 foo(x) {
-    y = bar(x); // ...but when applying functions
+    y = bar(x); // but when applying functions
     z = x + y;  // or operators
     return z;   // the data is to the right.
 }
